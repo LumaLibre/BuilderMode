@@ -8,11 +8,10 @@ import dev.lumas.build.util.CommandLookup;
 import dev.lumas.lumacore.manager.modules.AutoRegister;
 import dev.lumas.lumacore.manager.modules.RegisterType;
 import dev.lumas.lumacore.utility.Text;
+import io.papermc.paper.block.TileStateInventoryHolder;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.ItemFrame;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -22,6 +21,8 @@ import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.*;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
@@ -61,26 +62,33 @@ public class PlayerListeners implements Listener {
         SuspendedPlayerRegistry.INSTANCE.unregisterSuspendedPlayer(player.getUniqueId());
     }
 
-
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onPlayerOpenInventory(InventoryOpenEvent event) {
-        Player player = (Player) event.getPlayer();
-        if (!SuspendedPlayerRegistry.INSTANCE.isSuspended(player.getUniqueId())) {
-            return;
-        }
+        if (!(event.getPlayer() instanceof Player player)) return;
+        if (!SuspendedPlayerRegistry.INSTANCE.isSuspended(player.getUniqueId())) return;
 
         SuspendedPlayer suspendedPlayer = SuspendedPlayerRegistry.INSTANCE.getSuspendedPlayer(player.getUniqueId());
         Preconditions.checkNotNull(suspendedPlayer, "SuspendedPlayer should not be null here.");
-        if (!suspendedPlayer.isSuspended()) {
-            return;
-        }
+        if (!suspendedPlayer.isSuspended()) return;
 
-        InventoryType type = event.getInventory().getType();
+        Inventory inventory = event.getInventory();
+        InventoryType type = inventory.getType();
+        if (type == InventoryType.PLAYER || type == InventoryType.CREATIVE
+                || type == InventoryType.CRAFTING || type == InventoryType.WORKBENCH) return;
 
-        if (type != InventoryType.PLAYER && type != InventoryType.CREATIVE && type != InventoryType.CRAFTING && type != InventoryType.WORKBENCH) {
+        if (isRealContainer(inventory)) {
             Text.msg(player, "You cannot open this inventory while suspended.");
             event.setCancelled(true);
         }
+    }
+    private boolean isRealContainer(Inventory inventory) {
+        InventoryHolder holder = inventory.getHolder();
+
+        if (holder instanceof TileStateInventoryHolder) return true; // Chests, Furnaces, etc.
+        if (holder instanceof AbstractHorse) return true; // Horses, Donkeys, Llamas, etc.
+        //if (holder instanceof Entity) return true; <- Unsure about this one
+
+        return inventory.getLocation() != null; // Plugin GUIs probably don't have a location associated with them
     }
 
     @EventHandler
