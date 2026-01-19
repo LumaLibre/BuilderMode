@@ -11,16 +11,22 @@ import dev.lumas.lumacore.utility.Text;
 import io.papermc.paper.block.TileStateInventoryHolder;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.block.Block;
+import org.bukkit.block.DecoratedPot;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.*;
+import org.bukkit.inventory.DecoratedPotInventory;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
@@ -264,6 +270,34 @@ public class PlayerListeners implements Listener {
         if (isTagged(inFrame)) {
             frame.setItem(new ItemStack(Material.AIR));
         }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onDecoratedPotInteract(PlayerInteractEvent event) {
+        if (event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
+
+        Block block = event.getClickedBlock();
+        if (block == null || block.getType() != Material.DECORATED_POT) return;
+
+        Player player = event.getPlayer();
+        if (SuspendedPlayerRegistry.INSTANCE.isSuspended(player.getUniqueId())) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onDecoratedPotDrops(BlockDropItemEvent event) {
+        if (event.getBlockState().getType() != Material.DECORATED_POT) return;
+
+        Player player = event.getPlayer();
+        boolean suspended = SuspendedPlayerRegistry.INSTANCE.isSuspended(player.getUniqueId());
+
+        if (suspended) {
+            event.getItems().clear();
+            return;
+        }
+
+        event.getItems().removeIf((Item drop) -> isTagged(drop.getItemStack()));
     }
 
 }
