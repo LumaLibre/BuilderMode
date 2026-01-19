@@ -18,7 +18,7 @@ import java.util.List;
         usage = "/buildermode <subcommand>",
         aliases = {"bm", "buildmode"},
         permission = "buildermode.use",
-        playerOnly = true
+        playerOnly = false
 )
 @AutoRegister(RegisterType.COMMAND)
 public class CommandManager extends AbstractCommandManager<BuilderMode, SubCommand> {

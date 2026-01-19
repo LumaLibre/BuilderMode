@@ -26,7 +26,7 @@ import java.util.List;
 public class ResumeCommand implements SubCommand {
     @Override
     public boolean execute(BuilderMode builderMode, CommandSender commandSender, String s, String[] strings) {
-        Player player = (Player) commandSender;
+        if (!(commandSender instanceof Player player)) return true;
 
         if (!SuspendedPlayerRegistry.INSTANCE.isSuspended(player.getUniqueId())) {
             Text.msg(player, "You are not suspended.");
