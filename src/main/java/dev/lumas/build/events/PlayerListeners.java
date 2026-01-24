@@ -12,6 +12,7 @@ import io.papermc.paper.block.TileStateInventoryHolder;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
+import org.bukkit.block.Shelf;
 import org.bukkit.entity.AbstractHorse;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Item;
@@ -159,25 +160,6 @@ public class PlayerListeners implements Listener {
         event.setCancelled(true);
     }
 
-    // Prevent item smuggling through entities:
-    private boolean isTagged(ItemStack item) {
-        if (item == null || item.getType() == Material.AIR) return false;
-
-        ItemMeta meta = item.getItemMeta();
-        if (meta == null) return false;
-
-        Byte tagged = meta.getPersistentDataContainer().get(TAG, PersistentDataType.BYTE);
-        return tagged != null && tagged == (byte) 1;
-    }
-    private void tagItem(ItemStack item, boolean isPlayerSuspended) {
-        ItemMeta meta = item.getItemMeta();
-        if (meta == null) return;
-
-        if (!isPlayerSuspended) return;
-        meta.getPersistentDataContainer().set(TAG, PersistentDataType.BYTE, (byte) 1);
-        item.setItemMeta(meta);
-    }
-
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onArmorStandManipulate(PlayerArmorStandManipulateEvent event) {
 
@@ -284,7 +266,7 @@ public class PlayerListeners implements Listener {
         if (event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
 
         Block block = event.getClickedBlock();
-        if (block == null || block.getType() != Material.DECORATED_POT) return;
+        if (block == null || block.getType() != Material.DECORATED_POT || !(block.getState(false) instanceof Shelf)) return;
 
         Player player = event.getPlayer();
         if (SuspendedPlayerRegistry.INSTANCE.isSuspended(player.getUniqueId())) {
@@ -305,6 +287,26 @@ public class PlayerListeners implements Listener {
         }
 
         event.getItems().removeIf((Item drop) -> isTagged(drop.getItemStack()));
+    }
+
+
+    // Prevent item smuggling through entities:
+    private boolean isTagged(ItemStack item) {
+        if (item == null || item.getType() == Material.AIR) return false;
+
+        ItemMeta meta = item.getItemMeta();
+        if (meta == null) return false;
+
+        Byte tagged = meta.getPersistentDataContainer().get(TAG, PersistentDataType.BYTE);
+        return tagged != null && tagged == (byte) 1;
+    }
+    private void tagItem(ItemStack item, boolean isPlayerSuspended) {
+        ItemMeta meta = item.getItemMeta();
+        if (meta == null) return;
+
+        if (!isPlayerSuspended) return;
+        meta.getPersistentDataContainer().set(TAG, PersistentDataType.BYTE, (byte) 1);
+        item.setItemMeta(meta);
     }
 
 }

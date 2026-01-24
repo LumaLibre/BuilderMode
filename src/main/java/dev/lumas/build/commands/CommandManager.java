@@ -17,8 +17,7 @@ import java.util.List;
         description = "Main command for Builder Mode",
         usage = "/buildermode <subcommand>",
         aliases = {"bm", "buildmode"},
-        permission = "buildermode.use",
-        playerOnly = false
+        permission = "buildermode.use"
 )
 @AutoRegister(RegisterType.COMMAND)
 public class CommandManager extends AbstractCommandManager<BuilderMode, SubCommand> {
@@ -29,7 +28,10 @@ public class CommandManager extends AbstractCommandManager<BuilderMode, SubComma
 
     @Override
     public boolean handle(@NotNull CommandSender sender, @NotNull String label, String[] args) {
-        Player player = (Player) sender;
+        if (!(sender instanceof Player player)) {
+            return super.handle(sender, label, args);
+        }
+
         List<String> allowedWorlds = BuilderMode.getOkaeriConfig().getEnabledWorlds();
 
         for (String world : allowedWorlds) {
