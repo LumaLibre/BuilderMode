@@ -2,6 +2,7 @@ name: BuilderMode
 main: dev.lumas.build.BuilderMode
 version: '1.0-SNAPSHOT'
 api-version: 1.21
+folia-supported: true
 depend:
   - InventoryRollbackPlus
   - LuckPerms
