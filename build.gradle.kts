@@ -14,12 +14,14 @@ repositories {
     maven("https://repo.jsinco.dev/releases")
     maven("https://repo.codemc.io/repository/maven-public/")
     maven("https://storehouse.okaeri.eu/repository/maven-public/")
+    maven("https://maven.canvasmc.io/snapshots")
 }
 
 dependencies {
     compileOnly("net.luckperms:api:5.4")
     compileOnly("dev.lumas.lumacore:LumaCore:d56563b")
-    compileOnly("io.papermc.paper:paper-api:1.21.11-R0.1-SNAPSHOT")
+    //compileOnly("io.papermc.paper:paper-api:1.21.11-R0.1-SNAPSHOT")
+    compileOnly("io.canvasmc.canvas:canvas-api:1.21.11-R0.1-SNAPSHOT")
     compileOnly("com.nuclyon.technicallycoded.inventoryrollback:InventoryRollbackPlus:1.7.3")
     implementation("eu.okaeri:okaeri-configs-yaml-bukkit:5.0.5")
     implementation("eu.okaeri:okaeri-configs-serdes-bukkit:5.0.5")

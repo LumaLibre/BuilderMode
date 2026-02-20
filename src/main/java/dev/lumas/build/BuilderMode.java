@@ -3,6 +3,7 @@ package dev.lumas.build;
 import com.google.common.base.Preconditions;
 import dev.lumas.build.configuration.Config;
 import dev.lumas.build.contexts.SuspendedContextCalculator;
+import dev.lumas.build.events.CanvasListeners;
 import dev.lumas.build.model.SuspendedPlayer;
 import dev.lumas.build.model.SuspendedPlayerRegistry;
 import dev.lumas.lumacore.manager.modules.ModuleManager;
@@ -22,6 +23,18 @@ import java.nio.file.Path;
 
 public final class BuilderMode extends JavaPlugin {
 
+    private static final boolean IS_CANVAS;
+
+    static {
+        boolean b = false;
+        try {
+            Class.forName("io.canvasmc.canvas.event.EntityTeleportAsyncEvent");
+            b = true;
+        } catch (ClassNotFoundException ignored) {}
+        IS_CANVAS = b;
+    }
+
+
     @Getter
     private static BuilderMode instance;
     @Getter
@@ -36,6 +49,10 @@ public final class BuilderMode extends JavaPlugin {
         instance = this;
         okaeriConfig = loadConfig(Config.class, "config.yml");
         moduleManager = new ModuleManager(this);
+
+        if (IS_CANVAS) {
+            getServer().getPluginManager().registerEvents(new CanvasListeners(), this);
+        }
     }
 
     @Override
