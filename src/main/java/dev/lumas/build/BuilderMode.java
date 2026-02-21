@@ -49,10 +49,6 @@ public final class BuilderMode extends JavaPlugin {
         instance = this;
         okaeriConfig = loadConfig(Config.class, "config.yml");
         moduleManager = new ModuleManager(this);
-
-        if (IS_CANVAS) {
-            getServer().getPluginManager().registerEvents(new CanvasListeners(), this);
-        }
     }
 
     @Override
@@ -61,6 +57,10 @@ public final class BuilderMode extends JavaPlugin {
         suspendedContextCalculator = new SuspendedContextCalculator();
         luckPerms = Preconditions.checkNotNull(Bukkit.getServicesManager().getRegistration(LuckPerms.class)).getProvider();
         luckPerms.getContextManager().registerCalculator(suspendedContextCalculator);
+
+        if (IS_CANVAS) {
+            getServer().getPluginManager().registerEvents(new CanvasListeners(), this);
+        }
     }
 
     @Override
