@@ -6,23 +6,23 @@ import dev.lumas.build.commands.CommandManager;
 import dev.lumas.build.commands.SubCommand;
 import dev.lumas.build.model.SuspendedPlayer;
 import dev.lumas.build.model.SuspendedPlayerRegistry;
-import dev.lumas.lumacore.manager.commands.CommandInfo;
-import dev.lumas.lumacore.manager.modules.AutoRegister;
-import dev.lumas.lumacore.manager.modules.RegisterType;
+import dev.lumas.core.annotation.Autowire;
+import dev.lumas.core.annotation.CommandMeta;
+import dev.lumas.core.annotation.Register;
 import dev.lumas.lumacore.utility.Text;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.List;
 
-@CommandInfo(
+@CommandMeta(
         name = "resume",
         usage = "/<command> resume",
         permission = "buildermode.resume",
         parent = CommandManager.class,
         playerOnly = true
 )
-@AutoRegister(RegisterType.SUBCOMMAND)
+@Register(Autowire.SUBCOMMAND)
 public class ResumeCommand implements SubCommand {
     @Override
     public boolean execute(BuilderMode builderMode, CommandSender commandSender, String s, String[] strings) {

@@ -19,7 +19,7 @@ repositories {
 
 dependencies {
     compileOnly("net.luckperms:api:5.4")
-    compileOnly("dev.lumas.lumacore:LumaCore:d56563b")
+    compileOnly("dev.lumas.core:LumaCore:28d1a06")
     //compileOnly("io.papermc.paper:paper-api:1.21.11-R0.1-SNAPSHOT")
     compileOnly("io.canvasmc.canvas:canvas-api:1.21.11-R0.1-SNAPSHOT")
     compileOnly("com.nuclyon.technicallycoded.inventoryrollback:InventoryRollbackPlus:1.7.3")

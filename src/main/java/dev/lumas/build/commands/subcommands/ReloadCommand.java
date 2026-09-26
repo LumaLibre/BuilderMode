@@ -3,6 +3,9 @@ package dev.lumas.build.commands.subcommands;
 import dev.lumas.build.BuilderMode;
 import dev.lumas.build.commands.CommandManager;
 import dev.lumas.build.commands.SubCommand;
+import dev.lumas.core.annotation.Autowire;
+import dev.lumas.core.annotation.CommandMeta;
+import dev.lumas.core.annotation.Register;
 import dev.lumas.lumacore.manager.commands.CommandInfo;
 import dev.lumas.lumacore.manager.modules.AutoRegister;
 import dev.lumas.lumacore.manager.modules.RegisterType;
@@ -11,13 +14,13 @@ import org.bukkit.command.CommandSender;
 
 import java.util.List;
 
-@CommandInfo(
+@CommandMeta(
         name = "reload",
         usage = "/<command> reload",
         permission = "buildermode.reload",
         parent = CommandManager.class
 )
-@AutoRegister(RegisterType.SUBCOMMAND)
+@Register(Autowire.SUBCOMMAND)
 public class ReloadCommand implements SubCommand {
     @Override
     public boolean execute(BuilderMode builderMode, CommandSender commandSender, String s, String[] strings) {

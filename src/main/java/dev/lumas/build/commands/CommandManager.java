@@ -1,25 +1,25 @@
 package dev.lumas.build.commands;
 
 import dev.lumas.build.BuilderMode;
-import dev.lumas.lumacore.manager.commands.AbstractCommandManager;
-import dev.lumas.lumacore.manager.commands.CommandInfo;
-import dev.lumas.lumacore.manager.modules.AutoRegister;
-import dev.lumas.lumacore.manager.modules.RegisterType;
-import dev.lumas.lumacore.utility.Text;
+import dev.lumas.core.annotation.Autowire;
+import dev.lumas.core.annotation.CommandMeta;
+import dev.lumas.core.annotation.Register;
+import dev.lumas.core.model.command.AbstractCommandManager;
+import dev.lumas.core.util.Text;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-@CommandInfo(
+@CommandMeta(
         name = "buildermode",
         description = "Main command for Builder Mode",
         usage = "/buildermode <subcommand>",
         aliases = {"bm", "buildmode"},
         permission = "buildermode.use"
 )
-@AutoRegister(RegisterType.COMMAND)
+@Register(Autowire.COMMAND)
 public class CommandManager extends AbstractCommandManager<BuilderMode, SubCommand> {
 
     public CommandManager() {
@@ -34,10 +34,8 @@ public class CommandManager extends AbstractCommandManager<BuilderMode, SubComma
 
         List<String> allowedWorlds = BuilderMode.getOkaeriConfig().getEnabledWorlds();
 
-        for (String world : allowedWorlds) {
-            if (player.getWorld().getName().equalsIgnoreCase(world)) {
-                return super.handle(sender, label, args);
-            }
+        if (player.hasPermission("buildermode.bypassworldcheck") || allowedWorlds.contains(player.getWorld().getName())) {
+            return super.handle(sender, label, args);
         }
 
         Text.msg(player, "You cannot use Builder Mode commands in this world.");

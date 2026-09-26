@@ -1,9 +1,9 @@
 package dev.lumas.build.gui;
 
 import dev.lumas.build.model.SuspendedPlayerRegistry;
-import dev.lumas.lumacore.manager.guis.AbstractGui;
-import dev.lumas.lumacore.manager.guis.items.AbstractGuiItem;
-import dev.lumas.lumacore.manager.guis.items.IndexedGuiItem;
+import dev.lumas.core.model.gui.AbstractGui;
+import dev.lumas.core.model.gui.items.AbstractGuiItem;
+import dev.lumas.core.model.gui.items.IndexedGuiItem;
 import dev.lumas.lumacore.utility.Text;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;

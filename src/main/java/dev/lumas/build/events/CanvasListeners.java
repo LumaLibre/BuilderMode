@@ -3,6 +3,8 @@ package dev.lumas.build.events;
 import com.google.common.base.Preconditions;
 import dev.lumas.build.model.SuspendedPlayer;
 import dev.lumas.build.model.SuspendedPlayerRegistry;
+import dev.lumas.core.annotation.Autowire;
+import dev.lumas.core.annotation.Register;
 import dev.lumas.lumacore.utility.Text;
 import io.canvasmc.canvas.event.EntityPortalAsyncEvent;
 import io.canvasmc.canvas.event.EntityTeleportAsyncEvent;
@@ -10,7 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
-// no auto register because we depend on server software
+@Register(value = Autowire.LISTENER, requires = "io.canvasmc.canvas.event.EntityTeleportAsyncEvent")
 public class CanvasListeners implements Listener {
 
     // TODO: extract to a separate method

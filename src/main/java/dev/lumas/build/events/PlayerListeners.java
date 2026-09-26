@@ -5,8 +5,8 @@ import dev.lumas.build.BuilderMode;
 import dev.lumas.build.model.SuspendedPlayer;
 import dev.lumas.build.model.SuspendedPlayerRegistry;
 import dev.lumas.build.util.CommandLookup;
-import dev.lumas.lumacore.manager.modules.AutoRegister;
-import dev.lumas.lumacore.manager.modules.RegisterType;
+import dev.lumas.core.annotation.Autowire;
+import dev.lumas.core.annotation.Register;
 import dev.lumas.lumacore.utility.Text;
 import io.papermc.paper.block.TileStateInventoryHolder;
 import org.bukkit.Material;
@@ -43,7 +43,7 @@ import org.bukkit.persistence.PersistentDataType;
 
 import java.util.List;
 
-@AutoRegister(RegisterType.LISTENER)
+@Register(Autowire.LISTENER)
 public class PlayerListeners implements Listener {
 
     private static final NamespacedKey TAG = new NamespacedKey(BuilderMode.getInstance(), "suspended");
