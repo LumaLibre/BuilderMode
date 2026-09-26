@@ -52,10 +52,14 @@ public final class BuilderMode extends JavaPlugin {
 
         for (SuspendedPlayer suspendedPlayer : SuspendedPlayerRegistry.INSTANCE) {
             Player player = suspendedPlayer.getPlayer();
-            if (player != null && player.isOnline()) {
-                suspendedPlayer.resume(player);
-            } else {
-                Logging.errorLog("Could not resume suspended player with UUID " + suspendedPlayer.getUuid() + " as they are offline.");
+            if (player != null) {
+                player.getScheduler().execute(this, () -> {
+                    if (player.isOnline()) {
+                        suspendedPlayer.resume(player);
+                    } else {
+                        Logging.errorLog("Could not resume suspended player with UUID " + suspendedPlayer.getUuid() + " as they are offline.");
+                    }
+                }, null, 1);
             }
         }
         SuspendedPlayerRegistry.INSTANCE.clear();
