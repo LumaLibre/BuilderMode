@@ -10,7 +10,7 @@ import dev.lumas.build.model.SuspendedPlayerRegistry;
 import dev.lumas.core.annotation.Autowire;
 import dev.lumas.core.annotation.CommandMeta;
 import dev.lumas.core.annotation.Register;
-import dev.lumas.lumacore.utility.Text;
+import dev.lumas.core.util.Text;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 

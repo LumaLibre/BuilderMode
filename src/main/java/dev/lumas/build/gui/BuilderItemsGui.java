@@ -32,6 +32,7 @@ public class BuilderItemsGui extends AbstractGui {
         addItem(IndexedGuiItem.of(0, new ItemStack(Material.BARRIER), this::give));
         addItem(IndexedGuiItem.of(1, new ItemStack(Material.STRUCTURE_VOID), this::give));
         addItem(IndexedGuiItem.of(2, new ItemStack(Material.DEBUG_STICK), this::give));
+        addItem(IndexedGuiItem.of(3, new ItemStack(Material.TEST_BLOCK), this::give));
 
         for (int level = 0; level <= MAX_LIGHT_LEVEL; level++) {
             int index = (level < 8 ? 9 : 10) + level;
